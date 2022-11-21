@@ -38,3 +38,5 @@
 // ? =>> SearchBar.js den  SearchBar steyti kaldirdik ve onu datanin icine attik ve sonrada SearchBardaki inputdan
 // todo: onChange={(event) =>this.setState({ searchQuery: event.target.value })} bunuda sildik artik onun yerine props verdik.
 // ilk once bir tane property olusturduk SearchQuery: "" diye sonra bu propertyie bir state tanimladik  ve bu statide biz searchMovie() fonksiyonun icinde yazdik . searchQueryi de state icinde inputdan gelen value esitledik. sonrada filterMovies() icinde value ile filimlerin isimlerini karsilastirdik ve bir fonksiyon yazdik filterMovies adinda ve onlardida props araci ile yerlerine koyduk.
+
+// json-server --watch src/api/movies.json --port 3002

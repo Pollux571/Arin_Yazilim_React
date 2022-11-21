@@ -1,84 +1,58 @@
 import React from "react";
 import MovieList from "./MovieList";
 import SearchBar from "./SearchBar";
+import axios from "axios";
 
 class App extends React.Component {
   state = {
-    movies: [
-      {
-        id: 1,
-        name: "The Flash",
-        rating: 8.3,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/wHa6KOJAoNTFLFtp7wguUJKSnju.jpg",
-      },
-
-      {
-        id: 2,
-        name: "Interstellar",
-        rating: 6.8,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-      },
-
-      {
-        id: 3,
-        name: "Arrow",
-        rating: 7.9,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/gKG5QGz5Ngf8fgWpBsWtlg5L2SF.jpg",
-      },
-      {
-        id: 4,
-        name: "Rogue",
-        rating: 7.4,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/uOw5JD8IlD546feZ6oxbIjvN66P.jpg",
-      },
-      {
-        id: 5,
-        name: "Project Power",
-        rating: 6.7,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/TnOeov4w0sTtV2gqICqIxVi74V.jpg",
-      },
-
-      {
-        id: 6,
-        name: "Superman",
-        rating: 7.6,
-        overview:
-          "This is a wider card with supporting text below as a natural lead-in to additional content.",
-        imageURL:
-          "https://image.tmdb.org/t/p/w220_and_h330_face/6Bbq8qQWpoApLZYWFFAuZ1r2gFw.jpg",
-      },
-    ],
+    movies: [],
 
     SearchQuery: "",
   };
 
-  deleteMovie = (movie) => {
-    const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
+  //  ! 1 -  componentDidMount ile fetch yaptik get request
+  // async componentDidMount() {
+  //   const baseURL = "http://localhost:3002/movies";
+  //   const response = await fetch(baseURL);
+  //   const data = await response.json();
+  //   console.log(response);
+  //   console.log(data);
+  //  this.setState({ movies: data });
+  // }
 
-    // this.setState({
-    //   movies: newMovieList,
-    // });
-    // console.log(this);   // App
+  // ! 2- axios ile get requeest yapmak
+  async componentDidMount() {
+    const response = await axios.get("http://localhost:3002/movies");
+    // console.log(response);
+    this.setState({ movies: response.data });
+    // console.log(this.state.movies);
+  }
 
-    this.setState((state) => ({
-      movies: newMovieList,
-    }));
-  };
+  // deleteMovie = (movie) => {
+  //   const newMovieList = this.state.movies.filter((m) => m.id !== movie.id);
+
+  //   // this.setState({
+  //   //   movies: newMovieList,
+  //   // });
+  //   // console.log(this);   // App
+
+  //   this.setState((state) => ({
+  //     movies: newMovieList,
+  //   }));
+  // };
+
+  // ! delete moviede fetchle yapitik sonradan axiosa cevirdik
+  deleteMovie = async (movie) => {
+   axios.delete(`http://localhost:3002/movies/${movie.id}`);
+
+    const newMovieList = this.state.movies.filter(
+      m => m.id !== movie.id
+    );
+
+    this.setState( state => ({
+      movies:newMovieList
+    }))
+}
 
   searchMovie = (event) => {
     // ! burda arama motrorunun kodu inputdaki arama motorunun ve bu kodun devami asli renderin icinde
@@ -90,7 +64,9 @@ class App extends React.Component {
     let filteredMovies = this.state.movies.filter((movie) => {
       // ? arama motrunda kucuk harf buyuk harf olayi oldugu icin toLowerCase() fonksiyonun bununla def ediyoruz
       return (
-        movie.name.toLowerCase().indexOf(this.state.SearchQuery.toLowerCase()) !== -1
+        movie.name
+          .toLowerCase()
+          .indexOf(this.state.SearchQuery.toLowerCase()) !== -1
       );
     });
 
